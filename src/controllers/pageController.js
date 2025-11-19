@@ -5,12 +5,40 @@ exports.getPage = async (req, res, next) => {
     const { pageId } = req.params;
     const expand = req.query.expand || 'body.view,version,space';
     const data = await confluenceService.getPage(pageId, expand);
-    res.json(data);
+    const response = {
+      id: data.id,
+      type: data.type,
+      title: data.title,
+      version: {
+        number: data.version.number,
+        minorEdit: data.version.minorEdit,
+        by: data.version.by.displayName,
+        when: data.version.when
+      },
+      space: {
+        id: data.space.id,
+        key: data.space.key,
+        name: data.space.name
+      },
+      body: {
+        content: data.body.view.value
+      }
+    };
+    res.json(response);
   } catch (err) {
     next(err);
   }
 };
 
+exports.getAllPage = async (req, res, next) => {
+  try {
+    const data = await confluenceService.getAllPage();
+ 
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+}
 exports.createPage = async (req, res, next) => {
   try {
     const { title, content, parentId, spaceKey } = req.body;

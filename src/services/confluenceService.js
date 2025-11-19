@@ -151,6 +151,7 @@ class ConfluenceService {
   }
 
   async search(cql, limit = 25, start = 0) {
+    console.log('Executing CQL Search:', cql);
     const url = `${this.baseUrl}/rest/api/content/search?cql=${encodeURIComponent(cql)}&limit=${limit}&start=${start}`;
     const response = await fetch(url, {
       method: 'GET',
@@ -159,6 +160,7 @@ class ConfluenceService {
         'Accept': 'application/json' 
       }
     });
+    console.log('Search Response Status:', response);
     return handleResponse(response);
   }
 
@@ -174,6 +176,17 @@ class ConfluenceService {
     return handleResponse(response);
   }
 
+  async getAllPage() {
+    const url = `${this.apiBase}?limit=1000`;
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: { 
+        'Authorization': this.authHeader, 
+        'Accept': 'application/json' 
+      }
+    });
+    return handleResponse(response);
+  }
   async addLabels(pageId, labels) {
     const payload = labels.map(label => ({
       prefix: 'global',

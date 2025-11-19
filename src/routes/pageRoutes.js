@@ -3,6 +3,7 @@ const router = express.Router();
 const pageController = require('../controllers/pageController');
 
 router.get('/:pageId', pageController.getPage);
+router.get('/', pageController.getAllPage);
 router.post('/', pageController.createPage);
 router.put('/:pageId', pageController.updatePage);
 router.delete('/:pageId', pageController.deletePage);
